@@ -4,6 +4,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.thathurleyguy.exampleapp.models.Repo;
+import com.thathurleyguy.exampleapp.services.GithubService;
+
+import java.util.List;
+
+import retrofit.RestAdapter;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 
 public class ExampleActivity extends Activity {
@@ -12,6 +22,30 @@ public class ExampleActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example);
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("https://api.github.com")
+                .build();
+
+        GithubService service = restAdapter.create(GithubService.class);
+        service.listRepos("0")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Repo>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(ExampleActivity.this, "Uh oh something went wrong :(", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(List<Repo> repos) {
+                        Toast.makeText(ExampleActivity.this, "Found " + repos.size() + " repos!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
 

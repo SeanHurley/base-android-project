@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thathurleyguy.exampleapp.models.Repo;
@@ -11,17 +12,21 @@ import com.thathurleyguy.exampleapp.services.GithubService;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RestAdapter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
 
 public class ExampleActivity extends Activity {
+    @InjectView(R.id.txt_title) TextView buttonLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example);
+        ButterKnife.inject(this);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://api.github.com")

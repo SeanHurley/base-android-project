@@ -14,7 +14,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RestAdapter;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -28,12 +27,7 @@ public class ExampleActivity extends Activity {
         setContentView(R.layout.activity_example);
         ButterKnife.inject(this);
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://api.github.com")
-                .build();
-
-        GithubService service = restAdapter.create(GithubService.class);
-        service.listRepos("0")
+        GithubService.getService().listRepos("0")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Repo>>() {
                     @Override
